@@ -18,23 +18,29 @@ import com.example.fourtitudetask1.activities.DummyDetailActivity;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class DummyAdapter extends RecyclerView.Adapter<DummyAdapter.DummyViewHolder> {
 
     private List<Dummy> dummyList;
     private Context context;
 
     public class DummyViewHolder extends RecyclerView.ViewHolder {
-        private TextView title, subtitle, description;
-        private CardView cardView;
-        private ImageView image;
+        @BindView(R.id.tv_title)
+        TextView tvTitle;
+        @BindView(R.id.tv_subtitle)
+        TextView tvSubtitle;
+        @BindView(R.id.tv_description)
+        TextView tvDescription;
+        @BindView(R.id.cv_dummy)
+        CardView cvDummy;
+        @BindView(R.id.iv_dummy)
+        ImageView ivDummy;
 
         public DummyViewHolder(View view) {
             super(view);
-            title = view.findViewById(R.id.tv_title);
-            subtitle = view.findViewById(R.id.tv_subtitle);
-            description = view.findViewById(R.id.tv_description);
-            cardView = view.findViewById(R.id.cv_dummy);
-            image = view.findViewById(R.id.iv_dummy);
+            ButterKnife.bind(this, itemView);
         }
     }
 
@@ -54,17 +60,17 @@ public class DummyAdapter extends RecyclerView.Adapter<DummyAdapter.DummyViewHol
     @Override
     public void onBindViewHolder(DummyViewHolder holder, int position) {
         Dummy dummy = dummyList.get(position);
-        holder.title.setText(dummy.getTitle());
-        holder.subtitle.setText(dummy.getSubtitle());
-        holder.description.setText(dummy.getDescription());
+        holder.tvTitle.setText(dummy.getTitle());
+        holder.tvSubtitle.setText(dummy.getSubtitle());
+        holder.tvDescription.setText(dummy.getDescription());
 
         Glide
                 .with(context)
                 .load(dummy.getImageUrl())
                 .placeholder(R.drawable.ic_launcher_background)
-                .into(holder.image);
+                .into(holder.ivDummy);
 
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
+        holder.cvDummy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, DummyDetailActivity.class);
