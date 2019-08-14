@@ -31,12 +31,6 @@ public class DummyDetailActivity extends AppCompatActivity {
     @BindView(R.id.iv_dummy)
     ImageView ivDummy;
 
-    public static void start(Context context) {
-        Intent starter = new Intent(context, DummyDetailActivity.class);
-//        starter.putExtra();
-        context.startActivity(starter);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -67,9 +67,6 @@ public class DummyAdapter extends RecyclerView.Adapter<DummyAdapter.DummyViewHol
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO figure how to put intent with starter
-//                DummyDetailActivity.start(context);
-
                 Intent intent = new Intent(context, DummyDetailActivity.class);
                 intent.putExtra("dummy", new Dummy(dummy.getTitle(), dummy.getSubtitle(), dummy.getDescription(), dummy.getImageUrl()));
                 context.startActivity(intent);

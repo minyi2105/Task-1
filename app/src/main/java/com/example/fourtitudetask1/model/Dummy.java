@@ -58,11 +58,6 @@ public class Dummy implements Parcelable {
         this.subtitle = data[1];
         this.description = data[2];
         this.imageUrl = data[3];
-
-//        // Deserialize Parcelable and cast to Bitmap first:
-//        Bitmap bitmap = (Bitmap)in.readParcelable(getClass().getClassLoader());
-//        // Convert Bitmap to Drawable:
-//        this.image = new BitmapDrawable(bitmap);
     }
 
 
@@ -79,11 +74,6 @@ public class Dummy implements Parcelable {
                 this.description,
                 this.imageUrl
         });
-
-//        // Convert Drawable to Bitmap first:
-//        Bitmap bitmap = (Bitmap)((BitmapDrawable) this.image).getBitmap();
-//        // Serialize bitmap as Parcelable:
-//        parcel.writeParcelable(bitmap, i);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
