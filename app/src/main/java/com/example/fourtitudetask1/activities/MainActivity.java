@@ -32,8 +32,6 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        rvDummy = findViewById(R.id.rv_dummy);
-
         loadDummyData();
         rvDummy.setHasFixedSize(true);
         rvDummy.setLayoutManager(new LinearLayoutManager(this));
