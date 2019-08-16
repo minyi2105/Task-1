@@ -3,8 +3,27 @@ package com.example.fourtitudetask1.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "dummy_table")
 public class Dummy implements Parcelable {
-    private String title, subtitle, description;
+
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
+    @ColumnInfo(name = "title")
+    private String title;
+
+    @ColumnInfo(name = "subtitle")
+    private String subtitle;
+
+    @ColumnInfo(name = "description")
+    private String description;
+
+    @ColumnInfo(name = "image_url")
     private String imageUrl;
 
     public Dummy() {
@@ -17,11 +36,20 @@ public class Dummy implements Parcelable {
         this.imageUrl = imageUrl;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @NonNull
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(@NonNull String title) {
         this.title = title;
     }
 
@@ -49,17 +77,6 @@ public class Dummy implements Parcelable {
         this.imageUrl = imageUrl;
     }
 
-    public Dummy(Parcel in) {
-        String[] data = new String[4];
-
-        in.readStringArray(data);
-        // the order needs to be the same as in writeToParcel() method
-        this.title = data[0];
-        this.subtitle = data[1];
-        this.description = data[2];
-        this.imageUrl = data[3];
-    }
-
 
     @Override
     public int describeContents() {
@@ -67,20 +84,27 @@ public class Dummy implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeStringArray(new String[]{
-                this.title,
-                this.subtitle,
-                this.description,
-                this.imageUrl
-        });
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.title);
+        dest.writeString(this.subtitle);
+        dest.writeString(this.description);
+        dest.writeString(this.imageUrl);
     }
 
-    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-        public Dummy createFromParcel(Parcel in) {
-            return new Dummy(in);
+    protected Dummy(Parcel in) {
+        this.title = in.readString();
+        this.subtitle = in.readString();
+        this.description = in.readString();
+        this.imageUrl = in.readString();
+    }
+
+    public static final Creator<Dummy> CREATOR = new Creator<Dummy>() {
+        @Override
+        public Dummy createFromParcel(Parcel source) {
+            return new Dummy(source);
         }
 
+        @Override
         public Dummy[] newArray(int size) {
             return new Dummy[size];
         }

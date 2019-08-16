@@ -13,8 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.fourtitudetask1.R;
-import com.example.fourtitudetask1.model.Dummy;
 import com.example.fourtitudetask1.activities.DummyDetailActivity;
+import com.example.fourtitudetask1.model.Dummy;
+import com.github.ybq.android.spinkit.sprite.CircleSprite;
+import com.github.ybq.android.spinkit.sprite.Sprite;
 
 import java.util.List;
 
@@ -44,7 +46,7 @@ public class DummyAdapter extends RecyclerView.Adapter<DummyAdapter.DummyViewHol
         }
     }
 
-    public DummyAdapter(Context context, List<Dummy> dummyList) {
+    public DummyAdapter(Context context, List dummyList) {
         this.context = context;
         this.dummyList = dummyList;
     }
@@ -59,25 +61,33 @@ public class DummyAdapter extends RecyclerView.Adapter<DummyAdapter.DummyViewHol
 
     @Override
     public void onBindViewHolder(DummyViewHolder holder, int position) {
-        Dummy dummy = dummyList.get(position);
-        holder.tvTitle.setText(dummy.getTitle());
-        holder.tvSubtitle.setText(dummy.getSubtitle());
-        holder.tvDescription.setText(dummy.getDescription());
+        if (dummyList != null) {
+            Dummy dummy = dummyList.get(position);
 
-        Glide
-                .with(context)
-                .load(dummy.getImageUrl())
-                .placeholder(R.drawable.ic_launcher_background)
-                .into(holder.ivDummy);
+            holder.tvTitle.setText(dummy.getTitle());
+            holder.tvSubtitle.setText(dummy.getSubtitle());
+            holder.tvDescription.setText(dummy.getDescription());
 
-        holder.cvDummy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, DummyDetailActivity.class);
-                intent.putExtra("dummy", new Dummy(dummy.getTitle(), dummy.getSubtitle(), dummy.getDescription(), dummy.getImageUrl()));
-                context.startActivity(intent);
-            }
-        });
+            Sprite circleSpinKit = new CircleSprite();
+            circleSpinKit.setColor(R.color.colorAccent);
+
+            Glide
+                    .with(context)
+                    .load(dummy.getImageUrl())
+                    .placeholder(circleSpinKit)
+                    .into(holder.ivDummy);
+
+            holder.cvDummy.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, DummyDetailActivity.class);
+                    intent.putExtra("id", dummyList.get(position).getId());
+                    context.startActivity(intent);
+                }
+            });
+        } else {
+            //TODO Display a no records found view
+        }
     }
 
     @Override
