@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">Fourtitude Task 1</string>
+
+    //Main Activity
+    <string name="no_records_found">No Records Found</string>
+
+    //Create New Dummy Activity
+    <string name="title">Title</string>
+    <string name="subtitle">Subtitle</string>
+    <string name="description">Description</string>
+    <string name="image_url">Image Url</string>
+    <string name="preview">Preview</string>
+    <string name="save">Save</string>
+    <string name="new_dummy_created">New dummy created!</string>
+    <string name="dummy_updated_successfully">Dummy updated successfully!</string>
+    <string name="title_is_required">Title is required.</string>
+    <string name="subtitle_is_required">Subtitle is required.</string>
+    <string name="description_is_required">Description is required</string>
+    <string name="image_url_is_required">Image Url is required.</string>
 </resources>

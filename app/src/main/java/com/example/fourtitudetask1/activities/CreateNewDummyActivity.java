@@ -132,7 +132,7 @@ public class CreateNewDummyActivity extends AppCompatActivity implements View.On
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            Toast.makeText(context.get(), "New dummy created!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context.get(), getResources().getString(R.string.new_dummy_created), Toast.LENGTH_SHORT).show();
             ((Activity) context.get()).finish();
         }
     }
@@ -156,7 +156,7 @@ public class CreateNewDummyActivity extends AppCompatActivity implements View.On
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            Toast.makeText(context.get(), "Dummy updated successfully!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context.get(), getResources().getString(R.string.dummy_updated_successfully), Toast.LENGTH_SHORT).show();
             finish();
         }
     }
@@ -194,10 +194,10 @@ public class CreateNewDummyActivity extends AppCompatActivity implements View.On
             case R.id.btn_save:
 
                 Map<View, String> map = new HashMap<>();
-                map.put(etTitle, "Title is required.");
-                map.put(etSubtitle, "Subtitle is required.");
-                map.put(etDescription, "Description is required");
-                map.put(etImageUrl, "Image Url is required.");
+                map.put(etTitle, getResources().getString(R.string.title_is_required));
+                map.put(etSubtitle, getResources().getString(R.string.subtitle_is_required));
+                map.put(etDescription, getResources().getString(R.string.description_is_required));
+                map.put(etImageUrl, getResources().getString(R.string.image_url_is_required));
 
                 String title = DummyUtil.getOnlyText(etTitle);
                 String subtitle = DummyUtil.getOnlyText(etSubtitle);
