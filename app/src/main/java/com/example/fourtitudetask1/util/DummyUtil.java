@@ -1,9 +1,14 @@
 package com.example.fourtitudetask1.util;
 
+import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
+
+import com.example.fourtitudetask1.R;
 
 import java.util.Map;
 
@@ -57,5 +62,16 @@ public class DummyUtil {
         }
 
         return text;
+    }
+
+    //set up CircularProgressDrawable
+    public static CircularProgressDrawable getCircularProgressDrawable(Context context){
+        CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(context);
+        circularProgressDrawable.setStrokeWidth(10f);
+        circularProgressDrawable.setCenterRadius(50f);
+        circularProgressDrawable.setColorSchemeColors(context.getResources().getColor(R.color.colorAccent));
+        circularProgressDrawable.start();
+
+        return circularProgressDrawable;
     }
 }

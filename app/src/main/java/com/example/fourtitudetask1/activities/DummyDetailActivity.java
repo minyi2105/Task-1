@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.example.fourtitudetask1.R;
 import com.example.fourtitudetask1.model.Dummy;
 import com.example.fourtitudetask1.room.DummyDatabase;
+import com.example.fourtitudetask1.util.DummyUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.lang.ref.WeakReference;
@@ -62,7 +63,11 @@ public class DummyDetailActivity extends AppCompatActivity implements View.OnCli
             id = getIntent().getIntExtra("id", 0);
             new GetDummy(DummyDetailActivity.this, id).execute();
         }
+    }
 
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 
     @Override
@@ -113,8 +118,8 @@ public class DummyDetailActivity extends AppCompatActivity implements View.OnCli
             Glide
                     .with(DummyDetailActivity.this)
                     .load(dummy.getImageUrl())
-                    .centerCrop()
-                    .placeholder(R.drawable.ic_launcher_background)
+                    .placeholder(DummyUtil.getCircularProgressDrawable(DummyDetailActivity.this))
+                    .error(R.drawable.ic_broken_image)
                     .into(ivDummy);
         }
     }

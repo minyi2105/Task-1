@@ -15,8 +15,7 @@ import com.bumptech.glide.Glide;
 import com.example.fourtitudetask1.R;
 import com.example.fourtitudetask1.activities.DummyDetailActivity;
 import com.example.fourtitudetask1.model.Dummy;
-import com.github.ybq.android.spinkit.sprite.CircleSprite;
-import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.example.fourtitudetask1.util.DummyUtil;
 
 import java.util.List;
 
@@ -27,6 +26,8 @@ public class DummyAdapter extends RecyclerView.Adapter<DummyAdapter.DummyViewHol
 
     private List<Dummy> dummyList;
     private Context context;
+    private RecyclerView recyclerView;
+    private CardView cardView;
 
     public class DummyViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv_title)
@@ -46,9 +47,11 @@ public class DummyAdapter extends RecyclerView.Adapter<DummyAdapter.DummyViewHol
         }
     }
 
-    public DummyAdapter(Context context, List dummyList) {
+    public DummyAdapter(Context context, RecyclerView recyclerView, CardView cardView, List dummyList) {
         this.context = context;
         this.dummyList = dummyList;
+        this.recyclerView = recyclerView;
+        this.cardView = cardView;
     }
 
     @Override
@@ -62,19 +65,20 @@ public class DummyAdapter extends RecyclerView.Adapter<DummyAdapter.DummyViewHol
     @Override
     public void onBindViewHolder(DummyViewHolder holder, int position) {
         if (dummyList != null) {
+            cardView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+
             Dummy dummy = dummyList.get(position);
 
             holder.tvTitle.setText(dummy.getTitle());
             holder.tvSubtitle.setText(dummy.getSubtitle());
             holder.tvDescription.setText(dummy.getDescription());
 
-            Sprite circleSpinKit = new CircleSprite();
-            circleSpinKit.setColor(R.color.colorAccent);
-
             Glide
                     .with(context)
                     .load(dummy.getImageUrl())
-                    .placeholder(circleSpinKit)
+                    .placeholder(DummyUtil.getCircularProgressDrawable(context))
+                    .error(R.drawable.ic_broken_image)
                     .into(holder.ivDummy);
 
             holder.cvDummy.setOnClickListener(new View.OnClickListener() {
@@ -86,7 +90,8 @@ public class DummyAdapter extends RecyclerView.Adapter<DummyAdapter.DummyViewHol
                 }
             });
         } else {
-            //TODO Display a no records found view
+            cardView.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
         }
     }
 

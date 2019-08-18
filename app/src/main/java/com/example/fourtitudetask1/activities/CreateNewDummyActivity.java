@@ -21,8 +21,6 @@ import com.example.fourtitudetask1.R;
 import com.example.fourtitudetask1.model.Dummy;
 import com.example.fourtitudetask1.room.DummyDatabase;
 import com.example.fourtitudetask1.util.DummyUtil;
-import com.github.ybq.android.spinkit.sprite.Sprite;
-import com.github.ybq.android.spinkit.style.DoubleBounce;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
@@ -60,6 +58,7 @@ public class CreateNewDummyActivity extends AppCompatActivity implements View.On
         if (getIntent().hasExtra("id")) {
             id = getIntent().getIntExtra("id", 0);
             new GetDummy(CreateNewDummyActivity.this, id).execute();
+            getUrlAndPreviewImage();
         }
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -102,17 +101,13 @@ public class CreateNewDummyActivity extends AppCompatActivity implements View.On
     }
 
     public void getUrlAndPreviewImage() {
-        ivImagePreview.setVisibility(View.VISIBLE);
-
         String imageUrl = etImageUrl.getText().toString();
-
-        Sprite doubleBounce = new DoubleBounce();
 
         if (!TextUtils.isEmpty(imageUrl)) {
             Glide
                     .with(CreateNewDummyActivity.this)
                     .load(imageUrl)
-                    .placeholder(doubleBounce)
+                    .placeholder(DummyUtil.getCircularProgressDrawable(CreateNewDummyActivity.this))
                     .error(R.drawable.ic_broken_image)
                     .into(ivImagePreview);
         }

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,6 +30,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //TODO unable to use R2
     @BindView(R.id.rv_dummy)
     RecyclerView rvDummy;
+    @BindView(R.id.cv_nothingFound)
+    CardView cvDummy;
     @BindView(R.id.fab_addNewDummy)
     FloatingActionButton fabAddNewDummy;
 
@@ -89,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         new GetAllDummies(MainActivity.this).execute();
     }
 
-    public static class GetAllDummies extends AsyncTask<Void, Void, List<Dummy>> {
+    public class GetAllDummies extends AsyncTask<Void, Void, List<Dummy>> {
         private WeakReference<Context> context;
 
         public GetAllDummies(Context context) {
@@ -107,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             super.onPostExecute(dummies);
             RecyclerView rv = ((Activity) context.get()).findViewById(R.id.rv_dummy);
 
-            DummyAdapter dummyAdapter = new DummyAdapter(context.get(), dummies);
+            DummyAdapter dummyAdapter = new DummyAdapter(context.get(), rvDummy, cvDummy, dummies);
             rv.setAdapter(dummyAdapter);
         }
     }
