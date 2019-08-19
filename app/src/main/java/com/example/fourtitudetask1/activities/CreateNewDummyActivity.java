@@ -52,7 +52,6 @@ public class CreateNewDummyActivity extends AppCompatActivity implements View.On
         ButterKnife.bind(this);
         btnSave.setOnClickListener(this);
 
-        etTitle.addTextChangedListener(new EditTextLinesLimiter(etTitle, 1));
         etSubtitle.addTextChangedListener(new EditTextLinesLimiter(etSubtitle, 3));
 
         //if it gets through here which means the user clicked the update button
@@ -93,6 +92,11 @@ public class CreateNewDummyActivity extends AppCompatActivity implements View.On
 
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override

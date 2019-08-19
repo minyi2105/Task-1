@@ -65,7 +65,6 @@ public class DummyDetailActivity extends AppCompatActivity implements View.OnCli
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();

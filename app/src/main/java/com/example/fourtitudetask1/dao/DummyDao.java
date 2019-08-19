@@ -20,6 +20,9 @@ public interface DummyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAllDummies(List<Dummy> dummies);
 
+    @Insert
+    void insertAllbyArray(Dummy... dummies);
+
     @Query("SELECT * FROM dummy_table ORDER BY id ASC")
     List<Dummy> getAllDummies();
 
