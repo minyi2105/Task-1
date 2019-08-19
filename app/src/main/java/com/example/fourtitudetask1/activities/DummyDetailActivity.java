@@ -47,6 +47,13 @@ public class DummyDetailActivity extends AppCompatActivity implements View.OnCli
         fabUpdateDummy.setOnClickListener(this);
 
         if (getIntent().hasExtra("id")) {
+            Glide
+                    .with(DummyDetailActivity.this)
+                    .load(ValidateUtil.getCircularProgressDrawable(DummyDetailActivity.this))
+                    .placeholder(ValidateUtil.getCircularProgressDrawable(DummyDetailActivity.this))
+                    .error(R.drawable.ic_broken_image)
+                    .into(ivDummy);
+
             id = getIntent().getIntExtra("id", 0);
 
             DummyDbUtil.GetDummy asyncTask = new DummyDbUtil.GetDummy(DummyDetailActivity.this, id);
