@@ -13,11 +13,14 @@ import java.util.List;
 
 @Dao
 public interface DummyDao {
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    //check if data created has the same ID with another record, should it be remained or replaced
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Dummy dummy);
 
-    @Query("SELECT * FROM dummy_table ORDER BY id DESC")
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertAllDummies(List<Dummy> dummies);
+
+    @Query("SELECT * FROM dummy_table ORDER BY id ASC")
     List<Dummy> getAllDummies();
 
     @Query("SELECT * FROM dummy_table WHERE id =:id")
@@ -28,14 +31,5 @@ public interface DummyDao {
 
     @Delete
     void delete(Dummy dummy);
-
-//    @Query("DELETE FROM dummy_table")
-//    void deleteAll();
-//
-//    @Query("SELECT * from dummy_table ORDER BY title ASC")
-//    LiveData<List<Dummy>> getAllDummies();
-//
-//    @Query("UPDATE dummy_table SET subtitle = :subtitle, description = :description, image_url = :imageUrl WHERE title =:title")
-//    void update(String title, String subtitle, String description, String imageUrl);
 }
 

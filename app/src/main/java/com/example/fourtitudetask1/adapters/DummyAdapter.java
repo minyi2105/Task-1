@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 import com.example.fourtitudetask1.R;
 import com.example.fourtitudetask1.activities.DummyDetailActivity;
 import com.example.fourtitudetask1.model.Dummy;
-import com.example.fourtitudetask1.util.DummyUtil;
+import com.example.fourtitudetask1.util.ValidateUtil;
 
 import java.util.List;
 
@@ -77,7 +77,7 @@ public class DummyAdapter extends RecyclerView.Adapter<DummyAdapter.DummyViewHol
             Glide
                     .with(context)
                     .load(dummy.getImageUrl())
-                    .placeholder(DummyUtil.getCircularProgressDrawable(context))
+                    .placeholder(ValidateUtil.getCircularProgressDrawable(context))
                     .error(R.drawable.ic_broken_image)
                     .into(holder.ivDummy);
 

@@ -1,9 +1,6 @@
 package com.example.fourtitudetask1.activities;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 
@@ -12,20 +9,20 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.fourtitudetask1.util.AsyncResponse;
 import com.example.fourtitudetask1.R;
 import com.example.fourtitudetask1.adapters.DummyAdapter;
 import com.example.fourtitudetask1.model.Dummy;
-import com.example.fourtitudetask1.room.DummyDatabase;
+import com.example.fourtitudetask1.util.DummyDbUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, AsyncResponse {
 
     //TODO unable to use R2
     @BindView(R.id.rv_dummy)
@@ -35,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @BindView(R.id.fab_addNewDummy)
     FloatingActionButton fabAddNewDummy;
 
-    private List<Dummy> dummyList = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +44,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         rvDummy.setHasFixedSize(true);
         rvDummy.setLayoutManager(new LinearLayoutManager(this));
+
+        //Pre populate the 20 dummy records
+        new DummyDbUtil.AddAllDummies(MainActivity.this, loadDummyList()).execute();
     }
 
-    private void loadDummyData() {
+    private List<Dummy> loadDummyList() {
+        List<Dummy> dummyList = new ArrayList<>();
+
         List<String> listOfUrls = new ArrayList<>();
         listOfUrls.add("https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg");
         listOfUrls.add("https://mymodernmet.com/wp/wp-content/uploads/2019/07/russian-blue-cats-17-1024x1024.jpg");
@@ -83,36 +85,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             dummyList.add(dummy);
         }
+
+        return dummyList;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        new GetAllDummies(MainActivity.this).execute();
+        DummyDbUtil.GetAllDummies asyncTask = new DummyDbUtil.GetAllDummies(MainActivity.this);
+        //this to set delegate/listener back to this class
+        asyncTask.delegate = this;
+        asyncTask.execute();
     }
 
-    public class GetAllDummies extends AsyncTask<Void, Void, List<Dummy>> {
-        private WeakReference<Context> context;
+    @Override
+    public void processFinish(Dummy dummy) {
 
-        public GetAllDummies(Context context) {
-            this.context = new WeakReference<>(context);
-        }
+    }
 
-        @Override
-        protected List<Dummy> doInBackground(Void... voids) {
-            DummyDatabase dummyDatabase = DummyDatabase.getAppDatabase(context.get());
-            return dummyDatabase.dummyDao().getAllDummies();
-        }
-
-        @Override
-        protected void onPostExecute(List<Dummy> dummies) {
-            super.onPostExecute(dummies);
-            RecyclerView rv = ((Activity) context.get()).findViewById(R.id.rv_dummy);
-
-            DummyAdapter dummyAdapter = new DummyAdapter(context.get(), rvDummy, cvDummy, dummies);
-            rv.setAdapter(dummyAdapter);
-        }
+    @Override
+    public void processFinish(List<Dummy> dummies) {
+        DummyAdapter dummyAdapter = new DummyAdapter(MainActivity.this, rvDummy, cvDummy, dummies);
+        rvDummy.setAdapter(dummyAdapter);
     }
 
     @Override

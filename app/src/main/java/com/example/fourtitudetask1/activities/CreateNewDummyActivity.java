@@ -1,8 +1,5 @@
 package com.example.fourtitudetask1.activities;
 
-import android.app.Activity;
-import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -12,24 +9,25 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.fourtitudetask1.R;
 import com.example.fourtitudetask1.model.Dummy;
-import com.example.fourtitudetask1.room.DummyDatabase;
-import com.example.fourtitudetask1.util.DummyUtil;
+import com.example.fourtitudetask1.util.AsyncResponse;
+import com.example.fourtitudetask1.util.DummyDbUtil;
+import com.example.fourtitudetask1.util.EditTextLinesLimiter;
+import com.example.fourtitudetask1.util.ValidateUtil;
 
-import java.lang.ref.WeakReference;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CreateNewDummyActivity extends AppCompatActivity implements View.OnClickListener {
+public class CreateNewDummyActivity extends AppCompatActivity implements View.OnClickListener, AsyncResponse {
 
     @BindView(R.id.et_title)
     EditText etTitle;
@@ -54,10 +52,18 @@ public class CreateNewDummyActivity extends AppCompatActivity implements View.On
         ButterKnife.bind(this);
         btnSave.setOnClickListener(this);
 
+        etTitle.addTextChangedListener(new EditTextLinesLimiter(etTitle, 1));
+        etSubtitle.addTextChangedListener(new EditTextLinesLimiter(etSubtitle, 3));
+
         //if it gets through here which means the user clicked the update button
         if (getIntent().hasExtra("id")) {
             id = getIntent().getIntExtra("id", 0);
-            new GetDummy(CreateNewDummyActivity.this, id).execute();
+
+            DummyDbUtil.GetDummy asyncTask = new DummyDbUtil.GetDummy(CreateNewDummyActivity.this, id);
+            //this to set delegate/listener back to this class
+            asyncTask.delegate = this;
+            asyncTask.execute();
+
             getUrlAndPreviewImage();
         }
 
@@ -107,85 +113,23 @@ public class CreateNewDummyActivity extends AppCompatActivity implements View.On
             Glide
                     .with(CreateNewDummyActivity.this)
                     .load(imageUrl)
-                    .placeholder(DummyUtil.getCircularProgressDrawable(CreateNewDummyActivity.this))
+                    .placeholder(ValidateUtil.getCircularProgressDrawable(CreateNewDummyActivity.this))
                     .error(R.drawable.ic_broken_image)
                     .into(ivImagePreview);
         }
     }
 
-    class AddDummy extends AsyncTask<Void, Void, Void> {
-        private Dummy dummy;
-        private WeakReference<Context> context;
-
-        public AddDummy(Context context, Dummy dummy) {
-            this.context = new WeakReference<>(context);
-            this.dummy = dummy;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            DummyDatabase dummyDatabase = DummyDatabase.getAppDatabase(context.get());
-            dummyDatabase.dummyDao().insert(dummy);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            Toast.makeText(context.get(), getResources().getString(R.string.new_dummy_created), Toast.LENGTH_SHORT).show();
-            ((Activity) context.get()).finish();
-        }
+    @Override
+    public void processFinish(Dummy dummy) {
+        etTitle.setText(dummy.getTitle());
+        etSubtitle.setText(dummy.getSubtitle());
+        etDescription.setText(dummy.getDescription());
+        etImageUrl.setText(dummy.getImageUrl());
     }
 
-    class UpdateDummy extends AsyncTask<Void, Void, Void> {
-        private Dummy dummy;
-        private WeakReference<Context> context;
+    @Override
+    public void processFinish(List<Dummy> dummies) {
 
-        public UpdateDummy(Context context, Dummy dummy) {
-            this.context = new WeakReference<>(context);
-            this.dummy = dummy;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            DummyDatabase dummyDatabase = DummyDatabase.getAppDatabase(context.get());
-            dummyDatabase.dummyDao().update(dummy);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            Toast.makeText(context.get(), getResources().getString(R.string.dummy_updated_successfully), Toast.LENGTH_SHORT).show();
-            finish();
-        }
-    }
-
-    class GetDummy extends AsyncTask<Void, Void, Dummy> {
-        private WeakReference<Context> context;
-        private int id;
-
-        public GetDummy(Context context, int id) {
-            this.context = new WeakReference<>(context);
-            this.id = id;
-        }
-
-        @Override
-        protected Dummy doInBackground(Void... voids) {
-            DummyDatabase dummyDatabase = DummyDatabase.getAppDatabase(context.get());
-            Dummy dummy = dummyDatabase.dummyDao().getDummy(id);
-            return dummy;
-        }
-
-        @Override
-        protected void onPostExecute(Dummy dummy) {
-            super.onPostExecute(dummy);
-
-            etTitle.setText(dummy.getTitle());
-            etSubtitle.setText(dummy.getSubtitle());
-            etDescription.setText(dummy.getDescription());
-            etImageUrl.setText(dummy.getImageUrl());
-        }
     }
 
     @Override
@@ -199,20 +143,20 @@ public class CreateNewDummyActivity extends AppCompatActivity implements View.On
                 map.put(etDescription, getResources().getString(R.string.description_is_required));
                 map.put(etImageUrl, getResources().getString(R.string.image_url_is_required));
 
-                String title = DummyUtil.getOnlyText(etTitle);
-                String subtitle = DummyUtil.getOnlyText(etSubtitle);
-                String description = DummyUtil.getOnlyText(etDescription);
-                String imageUrl = DummyUtil.getOnlyText(etImageUrl);
+                String title = ValidateUtil.getOnlyText(etTitle);
+                String subtitle = ValidateUtil.getOnlyText(etSubtitle);
+                String description = ValidateUtil.getOnlyText(etDescription);
+                String imageUrl = ValidateUtil.getOnlyText(etImageUrl);
 
-                if (!DummyUtil.isInputEmpty(view, map)) {
+                if (!ValidateUtil.isInputEmpty(view, map)) {
                     Dummy dummy = new Dummy(title, subtitle, description, imageUrl);
 
                     //if it gets through here which means the user clicked the update button
                     if (getIntent().hasExtra("id")) {
                         dummy.setId(id);
-                        new UpdateDummy(CreateNewDummyActivity.this, dummy).execute();
+                        new DummyDbUtil.UpdateDummy(CreateNewDummyActivity.this, dummy).execute();
                     } else {
-                        new AddDummy(CreateNewDummyActivity.this, dummy).execute();
+                        new DummyDbUtil.AddDummy(CreateNewDummyActivity.this, dummy).execute();
                     }
                 }
         }

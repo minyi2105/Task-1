@@ -12,7 +12,7 @@ import com.example.fourtitudetask1.R;
 
 import java.util.Map;
 
-public class DummyUtil {
+public class ValidateUtil {
     //valid edit text or text view (check if it's empty then display error message)
     public static boolean isInputEmpty(View view, Map<View, String> map) {
         boolean isEmpty = false;

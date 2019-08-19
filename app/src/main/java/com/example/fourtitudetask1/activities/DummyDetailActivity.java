@@ -1,8 +1,6 @@
 package com.example.fourtitudetask1.activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,18 +10,19 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.fourtitudetask1.util.AsyncResponse;
 import com.example.fourtitudetask1.R;
 import com.example.fourtitudetask1.model.Dummy;
-import com.example.fourtitudetask1.room.DummyDatabase;
-import com.example.fourtitudetask1.util.DummyUtil;
+import com.example.fourtitudetask1.util.DummyDbUtil;
+import com.example.fourtitudetask1.util.ValidateUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.lang.ref.WeakReference;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DummyDetailActivity extends AppCompatActivity implements View.OnClickListener {
+public class DummyDetailActivity extends AppCompatActivity implements View.OnClickListener, AsyncResponse {
 
     //TODO unable to use R2
     @BindView(R.id.tv_title)
@@ -49,7 +48,11 @@ public class DummyDetailActivity extends AppCompatActivity implements View.OnCli
 
         if (getIntent().hasExtra("id")) {
             id = getIntent().getIntExtra("id", 0);
-            new GetDummy(DummyDetailActivity.this, id).execute();
+
+            DummyDbUtil.GetDummy asyncTask = new DummyDbUtil.GetDummy(DummyDetailActivity.this, id);
+            //this to set delegate/listener back to this class
+            asyncTask.delegate = this;
+            asyncTask.execute();
         }
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -61,7 +64,11 @@ public class DummyDetailActivity extends AppCompatActivity implements View.OnCli
         super.onResume();
         if (getIntent().hasExtra("id")) {
             id = getIntent().getIntExtra("id", 0);
-            new GetDummy(DummyDetailActivity.this, id).execute();
+
+            DummyDbUtil.GetDummy asyncTask = new DummyDbUtil.GetDummy(DummyDetailActivity.this, id);
+            //this to set delegate/listener back to this class
+            asyncTask.delegate = this;
+            asyncTask.execute();
         }
     }
 
@@ -91,36 +98,22 @@ public class DummyDetailActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    class GetDummy extends AsyncTask<Void, Void, Dummy> {
-        private WeakReference<Context> context;
-        private int id;
+    @Override
+    public void processFinish(Dummy dummy) {
+        tvTitle.setText(dummy.getTitle());
+        tvSubtitle.setText(dummy.getSubtitle());
+        tvDescription.setText(dummy.getDescription());
 
-        public GetDummy(Context context, int id) {
-            this.context = new WeakReference<>(context);
-            this.id = id;
-        }
+        Glide
+                .with(DummyDetailActivity.this)
+                .load(dummy.getImageUrl())
+                .placeholder(ValidateUtil.getCircularProgressDrawable(DummyDetailActivity.this))
+                .error(R.drawable.ic_broken_image)
+                .into(ivDummy);
+    }
 
-        @Override
-        protected Dummy doInBackground(Void... voids) {
-            DummyDatabase dummyDatabase = DummyDatabase.getAppDatabase(context.get());
-            Dummy dummy = dummyDatabase.dummyDao().getDummy(id);
-            return dummy;
-        }
+    @Override
+    public void processFinish(List<Dummy> dummies) {
 
-        @Override
-        protected void onPostExecute(Dummy dummy) {
-            super.onPostExecute(dummy);
-
-            tvTitle.setText(dummy.getTitle());
-            tvSubtitle.setText(dummy.getSubtitle());
-            tvDescription.setText(dummy.getDescription());
-
-            Glide
-                    .with(DummyDetailActivity.this)
-                    .load(dummy.getImageUrl())
-                    .placeholder(DummyUtil.getCircularProgressDrawable(DummyDetailActivity.this))
-                    .error(R.drawable.ic_broken_image)
-                    .into(ivDummy);
-        }
     }
 }
