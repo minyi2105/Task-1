@@ -122,4 +122,9 @@ public class DummyDetailActivity extends AppCompatActivity implements View.OnCli
     public void processFinish(List<Dummy> dummies) {
 
     }
+
+    @Override
+    public void populatedFinish() {
+
+    }
 }

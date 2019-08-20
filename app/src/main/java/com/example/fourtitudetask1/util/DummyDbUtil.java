@@ -40,6 +40,7 @@ public class DummyDbUtil {
     public static class AddAllDummies extends AsyncTask<Void, Void, Void>{
         private List<Dummy> dummies;
         private WeakReference<Context> context;
+        public AsyncResponse delegate = null;
 
         public AddAllDummies(Context context, List<Dummy> dummies){
             this.context = new WeakReference<>(context);
@@ -50,6 +51,8 @@ public class DummyDbUtil {
         protected Void doInBackground(Void... voids) {
             DummyDatabase dummyDatabase = DummyDatabase.getAppDatabase(context.get());
             dummyDatabase.dummyDao().insertAllDummies(dummies);
+
+            delegate.populatedFinish();
             return null;
         }
 

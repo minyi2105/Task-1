@@ -137,6 +137,11 @@ public class CreateNewDummyActivity extends AppCompatActivity implements View.On
     }
 
     @Override
+    public void populatedFinish() {
+
+    }
+
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_save:
