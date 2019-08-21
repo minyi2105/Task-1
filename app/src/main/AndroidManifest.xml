@@ -11,8 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.CreateNewDummyActivity"></activity>
-        <activity android:name=".activities.DummyDetailActivity" />
+        <activity android:name=".activities.MovieDetailActivity"></activity>
         <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,6 +19,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.MovieMainActivity" />
+        <activity android:name=".activities.CreateNewDummyActivity" />
+        <activity android:name=".activities.DummyDetailActivity" />
+        <activity android:name=".activities.DummyMainActivity" />
     </application>
 
 </manifest>
