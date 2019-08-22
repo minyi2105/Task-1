@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -20,8 +21,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.fourtitudetask1.R;
 import com.example.fourtitudetask1.adapters.MovieAdapter;
 import com.example.fourtitudetask1.task3.model.Search;
+import com.example.fourtitudetask1.task3.mvp.ShowEmptyView;
 import com.example.fourtitudetask1.task3.mvp.movie_list.MovieListContract;
 import com.example.fourtitudetask1.task3.mvp.movie_list.MovieListPresenter;
+import com.example.fourtitudetask1.util.ValidateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +32,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MovieMainActivity extends AppCompatActivity implements MovieListContract.View, View.OnClickListener {
+public class MovieMainActivity extends AppCompatActivity implements MovieListContract.View, View.OnClickListener, ShowEmptyView {
 
     @BindView(R.id.tv_quote)
     TextView tvQuote;
@@ -69,7 +72,7 @@ public class MovieMainActivity extends AppCompatActivity implements MovieListCon
 
         ButterKnife.bind(this);
 
-
+        btnSearch.setOnClickListener(this);
 
         moviesList = new ArrayList<>();
         movieAdapter = new MovieAdapter(this, rvMovie, cvNothingFound, moviesList);
@@ -80,7 +83,7 @@ public class MovieMainActivity extends AppCompatActivity implements MovieListCon
 
         //Initializing presenter
         movieListPresenter = new MovieListPresenter(this);
-        movieListPresenter.requestDataFromServer();
+//        movieListPresenter.requestDataFromServer();
     }
 
     @Override
@@ -95,6 +98,11 @@ public class MovieMainActivity extends AppCompatActivity implements MovieListCon
     }
 
     @Override
+    public String getSearchInput() {
+        return ValidateUtil.getOnlyText(etSearch);
+    }
+
+    @Override
     public void showProgress() {
         progressBar.setVisibility(View.VISIBLE);
     }
@@ -102,6 +110,15 @@ public class MovieMainActivity extends AppCompatActivity implements MovieListCon
     @Override
     public void hideProgress() {
         progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void hideSoftKeyboard() {
+        View view = this.getCurrentFocus();
+        if(view != null){
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     @Override
@@ -114,14 +131,27 @@ public class MovieMainActivity extends AppCompatActivity implements MovieListCon
     @Override
     public void onResponseFailure(Throwable throwable) {
         Log.e(TAG, throwable.getMessage());
-        Toast.makeText(this, "An error has occurred, please try again later.", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getResources().getString(R.string.error_occurred), Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_search:
-
+                movieListPresenter.searchButtonClicked();
+                break;
         }
+    }
+
+    @Override
+    public void showEmptyView() {
+        rvMovie.setVisibility(View.GONE);
+        cvNothingFound.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideEmptyView() {
+        rvMovie.setVisibility(View.VISIBLE);
+        cvNothingFound.setVisibility(View.GONE);
     }
 }

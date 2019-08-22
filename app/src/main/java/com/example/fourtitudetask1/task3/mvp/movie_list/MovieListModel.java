@@ -7,6 +7,7 @@ import com.example.fourtitudetask1.task3.api.RetrofitUtil;
 import com.example.fourtitudetask1.task3.model.Search;
 import com.example.fourtitudetask1.task3.model.SearchApiResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -26,9 +27,18 @@ public class MovieListModel implements MovieListContract.Model {
         call.enqueue(new Callback<SearchApiResponse>() {
             @Override
             public void onResponse(Call<SearchApiResponse> call, Response<SearchApiResponse> response) {
-                List<Search> movies = response.body().getSearch();
-                Log.d(TAG, "Number of movies received: " + movies.size());
-                onFinishedListener.onFinished(movies);
+                SearchApiResponse searchApiResponse = response.body();
+                List<Search> movies = new ArrayList<>();
+
+                if (searchApiResponse.getResponse().equals("True")) {
+                    movies = response.body().getSearch();
+                    Log.d(TAG, "Number of movies received: " + movies.size());
+
+                } else {
+                    Log.d(TAG, "No movies found");
+                }
+
+                onFinishedListener.onSuccess(movies);
             }
 
             @Override

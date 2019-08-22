@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.fourtitudetask1.R;
 import com.example.fourtitudetask1.activities.MovieDetailActivity;
+import com.example.fourtitudetask1.activities.MovieMainActivity;
 import com.example.fourtitudetask1.task3.model.Search;
 import com.example.fourtitudetask1.util.ValidateUtil;
 
@@ -66,9 +67,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public void onBindViewHolder(MovieViewHolder holder, int position) {
-        if (movieList != null) {
-            cardView.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.VISIBLE);
+        MovieMainActivity movieMainActivity = (MovieMainActivity) context;
+
+        if (getItemCount() == 0) {
+            movieMainActivity.showEmptyView();
+        } else {
+            movieMainActivity.hideEmptyView();
 
             Search movie = movieList.get(position);
 
@@ -88,13 +92,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, MovieDetailActivity.class);
-                    intent.putExtra("id", movieList.get(position).getImdbID());
+                    intent.putExtra("imdbId", movieList.get(position).getImdbID());
                     context.startActivity(intent);
                 }
             });
-        } else {
-            cardView.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.GONE);
         }
     }
 
@@ -103,7 +104,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         return movieList.size();
     }
 
-    public void updateList(List<Search> updatedList){
-        movieList= updatedList;
+    public void updateList(List<Search> updatedList) {
+        movieList = updatedList;
     }
 }

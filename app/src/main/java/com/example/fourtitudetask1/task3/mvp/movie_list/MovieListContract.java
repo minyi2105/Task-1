@@ -8,7 +8,7 @@ public interface MovieListContract {
     interface Model {
 
         interface OnFinishedListener {
-            void onFinished(List<Search> movieArrayList);
+            void onSuccess(List<Search> movieArrayList);
 
             void onFailure(Throwable t);
         }
@@ -18,9 +18,13 @@ public interface MovieListContract {
 
     interface View {
 
+        String getSearchInput();
+
         void showProgress();
 
         void hideProgress();
+
+        void hideSoftKeyboard();
 
         void setDataToRecyclerView(List<Search> movieArrayList);
 
@@ -33,5 +37,7 @@ public interface MovieListContract {
         void onDestroy();
 
         void requestDataFromServer();
+
+        void searchButtonClicked();
     }
 }

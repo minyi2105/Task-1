@@ -15,7 +15,7 @@ public class MovieListPresenter implements MovieListContract.Presenter, MovieLis
     }
 
     @Override
-    public void onFinished(List<Search> movieArrayList) {
+    public void onSuccess(List<Search> movieArrayList) {
         movieListView.setDataToRecyclerView(movieArrayList);
         if (movieListView != null) {
             movieListView.hideProgress();
@@ -40,5 +40,21 @@ public class MovieListPresenter implements MovieListContract.Presenter, MovieLis
             movieListView.showProgress();
         }
         movieListModel.getMovieList(this, "Cat");
+    }
+
+    @Override
+    public void searchButtonClicked() {
+        movieListView.hideSoftKeyboard();
+
+        if (movieListView != null) {
+            if (movieListView.getSearchInput().isEmpty()) {
+//                movieListView.showInputError();
+            } else {
+                movieListView.showProgress();
+                movieListModel.getMovieList(this, movieListView.getSearchInput());
+//                movieListView.showUserSavedMessage();
+            }
+
+        }
     }
 }
