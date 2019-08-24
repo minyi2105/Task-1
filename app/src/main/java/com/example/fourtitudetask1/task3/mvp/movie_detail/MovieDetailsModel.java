@@ -46,24 +46,5 @@ public class MovieDetailsModel implements MovieDetailsContract.Model {
                         onFinishedListener.onSuccess(movie);
                     }
                 });
-
-
-//        Call<MovieApiResponse> call = apiService.getMovieById(OmdbHttpClient.OMDB_API_KEY, imdbID);
-//        call.enqueue(new Callback<MovieApiResponse>() {
-//            @Override
-//            public void onResponse(Call<MovieApiResponse> call, Response<MovieApiResponse> response) {
-//
-//                MovieApiResponse movieApiResponse = response.body();
-//                Log.d(TAG, "Number of movies received: " + movieApiResponse);
-//
-//                onFinishedListener.onSuccess(movieApiResponse);
-//            }
-//
-//            @Override
-//            public void onFailure(Call<MovieApiResponse> call, Throwable t) {
-//                Log.e(TAG, t.toString());
-//                onFinishedListener.onFailure(t);
-//            }
-//        });
     }
 }

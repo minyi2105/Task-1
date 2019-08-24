@@ -21,12 +21,16 @@ public class MovieListModel implements MovieListContract.Model {
     private List<Search> movieList;
 
     @Override
-    public void getMovieList(OnFinishedListener onFinishedListener, String searchResult) {
+    public void getMovieList(OnFinishedListener onFinishedListener, String searchResult, int page) {
+
+        if (page == 1) {
+            movieList = new ArrayList<>();
+        }
 
         OmdbHttpClient apiService =
                 RetrofitUtil.getRetrofitInstance().create(OmdbHttpClient.class);
 
-        apiService.getMovieBySearch(OmdbHttpClient.OMDB_API_KEY, searchResult)
+        apiService.getMovieBySearch(OmdbHttpClient.OMDB_API_KEY, searchResult, page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<SearchApiResponse>() {
@@ -37,7 +41,13 @@ public class MovieListModel implements MovieListContract.Model {
 
                     @Override
                     public void onNext(SearchApiResponse searchApiResponse) {
-                        movieList = new ArrayList<>(searchApiResponse.getSearch());
+                        if (searchApiResponse.getResponse().equals("True")) {
+                            if (page == 1) {
+                                movieList = new ArrayList<>(searchApiResponse.getSearch());
+                            } else {
+                                movieList.addAll(searchApiResponse.getSearch());
+                            }
+                        }
                     }
 
                     @Override
@@ -48,36 +58,8 @@ public class MovieListModel implements MovieListContract.Model {
 
                     @Override
                     public void onComplete() {
-                        Log.d(TAG, "Number of movies received: " + movieList.size());
                         onFinishedListener.onSuccess(movieList);
                     }
                 });
-
-
-//        Call<SearchApiResponse> call = apiService.getMovieBySearch(OmdbHttpClient.OMDB_API_KEY, searchResult);
-//        call.enqueue(new Callback<SearchApiResponse>() {
-//            @Override
-//            public void onResponse(Call<SearchApiResponse> call, Response<SearchApiResponse> response) {
-//                SearchApiResponse searchApiResponse = response.body();
-//                List<Search> movies = new ArrayList<>();
-//
-//                if (searchApiResponse.getResponse().equals("True")) {
-//                    movies = response.body().getSearch();
-//                    Log.d(TAG, "Number of movies received: " + movies.size());
-//
-//                } else {
-//                    Log.d(TAG, "No movies found");
-//                }
-//
-//                onFinishedListener.onSuccess(movies);
-//            }
-//
-//            @Override
-//            public void onFailure(Call<SearchApiResponse> call, Throwable t) {
-//                // Log error here since request failed
-//                Log.e(TAG, t.toString());
-//                onFinishedListener.onFailure(t);
-//            }
-//        });
     }
 }

@@ -27,8 +27,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     private List<Search> movieList;
     private Context context;
-    private RecyclerView recyclerView;
-    private CardView cardView;
 
     public class MovieViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv_title)
@@ -50,11 +48,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         }
     }
 
-    public MovieAdapter(Context context, RecyclerView recyclerView, CardView cardView, List<Search> movieList) {
+    /*@Inject*/
+    public MovieAdapter(Context context, List<Search> movieList) {
         this.context = context;
         this.movieList = movieList;
-        this.recyclerView = recyclerView;
-        this.cardView = cardView;
     }
 
     @Override
@@ -69,14 +66,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     public void onBindViewHolder(MovieViewHolder holder, int position) {
         MovieMainActivity movieMainActivity = (MovieMainActivity) context;
 
-        if (getItemCount() == 0) {
-            movieMainActivity.showEmptyView();
-        } else {
-            movieMainActivity.hideEmptyView();
-
+        if (movieList != null) {
             Search movie = movieList.get(position);
 
-            holder.tvTitle.setText(movie.getTitle());
+            holder.tvTitle.setText(movie.getTitle() + " " + position);
             holder.tvYear.setText(movie.getYear());
             holder.tvImdbId.setText(movie.getImdbID());
             holder.tvType.setText(movie.getType());
@@ -97,14 +90,49 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
                 }
             });
         }
+
+//        if (getItemCount() == 0) {
+//            movieMainActivity.showEmptyView();
+//        } else {
+//            movieMainActivity.hideEmptyView();
+//
+//            Search movie = movieList.get(position);
+//
+//            holder.tvTitle.setText(movie.getTitle());
+//            holder.tvYear.setText(movie.getYear());
+//            holder.tvImdbId.setText(movie.getImdbID());
+//            holder.tvType.setText(movie.getType());
+//
+//            Glide
+//                    .with(context)
+//                    .load(movie.getPoster())
+//                    .placeholder(ValidateUtil.getCircularProgressDrawable(context))
+//                    .error(R.drawable.ic_broken_image)
+//                    .into(holder.ivPoster);
+//
+//            holder.cvMovie.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Intent intent = new Intent(context, MovieDetailActivity.class);
+//                    intent.putExtra("imdbId", movieList.get(position).getImdbID());
+//                    context.startActivity(intent);
+//                }
+//            });
+//        }
     }
 
     @Override
     public int getItemCount() {
-        return movieList.size();
+        if (movieList == null) {
+            return 0;
+        } else {
+            return movieList.size();
+        }
     }
 
     public void updateList(List<Search> updatedList) {
         movieList = updatedList;
     }
+
+
 }

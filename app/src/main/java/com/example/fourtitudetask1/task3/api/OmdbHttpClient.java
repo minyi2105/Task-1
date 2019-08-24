@@ -21,5 +21,6 @@ public interface OmdbHttpClient {
 
     @GET(".")
     Observable<SearchApiResponse> getMovieBySearch(@Query("apikey") String apiKey,
-                                                   @Query("s") String searchInput);
+                                                   @Query("s") String searchInput,
+                                                   @Query("page") int page);
 }

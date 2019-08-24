@@ -13,7 +13,7 @@ public interface MovieListContract {
             void onFailure(Throwable t);
         }
 
-        void getMovieList(OnFinishedListener onFinishedListener, String searchResult);
+        void getMovieList(OnFinishedListener onFinishedListener, String searchResult, int page);
     }
 
     interface View {
@@ -30,6 +30,10 @@ public interface MovieListContract {
 
         void onResponseFailure(Throwable throwable);
 
+        void showEmptyView();
+
+        void hideEmptyView();
+
     }
 
     interface Presenter {
@@ -39,5 +43,7 @@ public interface MovieListContract {
         void requestDataFromServer();
 
         void searchButtonClicked();
+
+        void loadMoreMovieList(int page);
     }
 }
