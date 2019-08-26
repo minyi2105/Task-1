@@ -16,11 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.fourtitudetask1.R;
 import com.example.fourtitudetask1.adapters.RatingAdapter;
-import com.example.fourtitudetask1.task3.di.InitApplication;
-import com.example.fourtitudetask1.task3.di.component.DaggerActivityComponent;
-import com.example.fourtitudetask1.task3.di.module.MvpModule;
-import com.example.fourtitudetask1.task3.model.MovieApiResponse;
-import com.example.fourtitudetask1.task3.mvp.movie_detail.MovieDetailsContract;
+import com.example.fourtitudetask1.di.InitApplication;
+import com.example.fourtitudetask1.di.component.DaggerActivityComponent;
+import com.example.fourtitudetask1.di.module.MvpModule;
+import com.example.fourtitudetask1.model.MovieApiResponse;
+import com.example.fourtitudetask1.mvp.movie_detail.MovieDetailsContract;
 import com.example.fourtitudetask1.util.ValidateUtil;
 import com.google.android.material.snackbar.Snackbar;
 

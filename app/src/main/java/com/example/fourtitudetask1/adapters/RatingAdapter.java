@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fourtitudetask1.R;
-import com.example.fourtitudetask1.task3.model.Rating;
+import com.example.fourtitudetask1.model.Rating;
 
 import java.util.List;
 

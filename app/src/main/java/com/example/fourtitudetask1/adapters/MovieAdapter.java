@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 import com.example.fourtitudetask1.R;
 import com.example.fourtitudetask1.activities.MovieDetailActivity;
 import com.example.fourtitudetask1.activities.MovieMainActivity;
-import com.example.fourtitudetask1.task3.model.Search;
+import com.example.fourtitudetask1.model.Search;
 import com.example.fourtitudetask1.util.ValidateUtil;
 
 import java.util.List;
