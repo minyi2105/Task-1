@@ -12,15 +12,17 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fourtitudetask1.R;
 import com.example.fourtitudetask1.adapters.MovieAdapter;
+import com.example.fourtitudetask1.task3.item.MovieFooterItem;
+import com.example.fourtitudetask1.task3.item.MovieItem;
 import com.example.fourtitudetask1.task3.di.InitApplication;
 import com.example.fourtitudetask1.task3.di.component.DaggerActivityComponent;
 import com.example.fourtitudetask1.task3.di.module.MvpModule;
@@ -28,6 +30,10 @@ import com.example.fourtitudetask1.task3.model.Search;
 import com.example.fourtitudetask1.task3.mvp.ShowEmptyView;
 import com.example.fourtitudetask1.task3.mvp.movie_list.MovieListContract;
 import com.example.fourtitudetask1.util.ValidateUtil;
+import com.xwray.groupie.GroupAdapter;
+import com.xwray.groupie.Item;
+import com.xwray.groupie.OnItemClickListener;
+import com.xwray.groupie.Section;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +68,13 @@ public class MovieMainActivity extends AppCompatActivity implements MovieListCon
     private List<Search> moviesList;
     private MovieAdapter movieAdapter;
 
+    private GroupAdapter groupAdapter = new GroupAdapter();
+    private Section listSection = new Section();
+    private List<MovieItem> movieItems = new ArrayList<>();
+    private MovieFooterItem footerItem = new MovieFooterItem();
+
+    private Boolean isSearch = true;
+
 //    private MovieListPresenter movieListPresenter;
 
     @Inject
@@ -71,7 +84,7 @@ public class MovieMainActivity extends AppCompatActivity implements MovieListCon
     Context mContext;
 
 
-    private LinearLayoutManager mLayoutManager;
+    private LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
 
     private int page = 1;
 
@@ -105,27 +118,42 @@ public class MovieMainActivity extends AppCompatActivity implements MovieListCon
         ButterKnife.bind(this);
 
         btnSearch.setOnClickListener(this);
-
-        moviesList = new ArrayList<>();
-        mLayoutManager = new GridLayoutManager(this, 2);
+        /*mLayoutManager = new GridLayoutManager(this, 2);
         movieAdapter = new MovieAdapter(this, moviesList);
 
         rvMovie.setLayoutManager(mLayoutManager);
         rvMovie.setHasFixedSize(true);
         rvMovie.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-        rvMovie.setAdapter(movieAdapter);
+        rvMovie.setAdapter(movieAdapter);*/
 
         //Initializing presenter
 //        movieListPresenter = new MovieListPresenter(this);
 //        movieListPresenter.requestDataFromServer();
-
+        rvMovie.setLayoutManager(mLayoutManager);
         DaggerActivityComponent.builder()
                 .appComponent(InitApplication.get(this).component())
                 .mvpModule(new MvpModule(this))
                 .build()
                 .inject(this);
 
+        setUpGroupie();
         setListeners();
+    }
+
+    private void setUpGroupie() {
+        groupAdapter.add(listSection);
+
+        rvMovie.setAdapter(groupAdapter);
+        listSection.setFooter(footerItem);
+
+        groupAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(@NonNull Item item, @NonNull View view) {
+                Intent intent = new Intent(MovieMainActivity.this, MovieDetailActivity.class);
+                intent.putExtra("imdbId", ((MovieItem) item).getMovie().getImdbID());
+                MovieMainActivity.this.startActivity(intent);
+            }
+        });
     }
 
     private void setListeners() {
@@ -136,7 +164,8 @@ public class MovieMainActivity extends AppCompatActivity implements MovieListCon
                 super.onScrollStateChanged(recyclerView, newState);
 
                 if (!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE) {
-                     movieListPresenter.loadMoreMovieList(++page);
+                    movieListPresenter.loadMoreMovieList(++page);
+                    isSearch = false;
                 }
             }
         });
@@ -160,12 +189,16 @@ public class MovieMainActivity extends AppCompatActivity implements MovieListCon
 
     @Override
     public void showProgress() {
-        progressBar.setVisibility(View.VISIBLE);
+        //progressBar.setVisibility(View.VISIBLE);
+        //listSection.setFooter(footerItem);
+        footerItem.show();
     }
 
     @Override
     public void hideProgress() {
-        progressBar.setVisibility(View.GONE);
+        //progressBar.setVisibility(View.GONE);
+        //listSection.removeFooter();
+        footerItem.hide();
     }
 
     @Override
@@ -179,9 +212,21 @@ public class MovieMainActivity extends AppCompatActivity implements MovieListCon
 
     @Override
     public void setDataToRecyclerView(List<Search> movieArrayList) {
-        moviesList.addAll(movieArrayList);
+
+        /*moviesList.addAll(movieArrayList);
         movieAdapter.updateList(movieArrayList);
-        movieAdapter.notifyDataSetChanged();
+        movieAdapter.notifyDataSetChanged();*/
+
+        listSection.removeAll(movieItems);
+        movieItems = new ArrayList<>();
+
+        for (Search eachMovie : movieArrayList) {
+            movieItems.add(new MovieItem(this, eachMovie));
+        }
+
+        listSection.addAll(movieItems);
+
+        listSection.notifyChanged();
     }
 
     @Override
@@ -195,6 +240,7 @@ public class MovieMainActivity extends AppCompatActivity implements MovieListCon
         switch (view.getId()) {
             case R.id.btn_search:
                 movieListPresenter.searchButtonClicked();
+                isSearch = true;
                 break;
         }
     }

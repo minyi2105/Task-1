@@ -10,6 +10,7 @@ public class MovieListPresenter implements MovieListContract.Presenter, MovieLis
 
     private MovieListContract.View movieListView;
     private MovieListContract.Model movieListModel;
+    private int page = 1;
 
     @Inject
     public MovieListPresenter(MovieListContract.View movieListView) {
@@ -19,7 +20,9 @@ public class MovieListPresenter implements MovieListContract.Presenter, MovieLis
 
     @Override
     public void onSuccess(List<Search> movieArrayList) {
+
         movieListView.setDataToRecyclerView(movieArrayList);
+
         if (movieListView != null) {
             movieListView.hideProgress();
             if (!movieArrayList.isEmpty()) {
@@ -48,7 +51,6 @@ public class MovieListPresenter implements MovieListContract.Presenter, MovieLis
         if (movieListView != null) {
             movieListView.showProgress();
         }
-//        movieListModel.getMovieList(this, "Cat");
     }
 
     @Override
@@ -59,6 +61,7 @@ public class MovieListPresenter implements MovieListContract.Presenter, MovieLis
             if (movieListView.getSearchInput().isEmpty()) {
 //                movieListView.showInputError();
             } else {
+                this.page = 1;
                 movieListView.showProgress();
                 movieListModel.getMovieList(this, movieListView.getSearchInput(), 1);
 //                movieListView.showUserSavedMessage();
@@ -71,6 +74,7 @@ public class MovieListPresenter implements MovieListContract.Presenter, MovieLis
         if (movieListView != null) {
             movieListView.showProgress();
             movieListModel.getMovieList(this, movieListView.getSearchInput(), page);
+            this.page = page;
         }
     }
 }

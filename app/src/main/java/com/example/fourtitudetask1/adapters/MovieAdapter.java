@@ -90,35 +90,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
                 }
             });
         }
-
-//        if (getItemCount() == 0) {
-//            movieMainActivity.showEmptyView();
-//        } else {
-//            movieMainActivity.hideEmptyView();
-//
-//            Search movie = movieList.get(position);
-//
-//            holder.tvTitle.setText(movie.getTitle());
-//            holder.tvYear.setText(movie.getYear());
-//            holder.tvImdbId.setText(movie.getImdbID());
-//            holder.tvType.setText(movie.getType());
-//
-//            Glide
-//                    .with(context)
-//                    .load(movie.getPoster())
-//                    .placeholder(ValidateUtil.getCircularProgressDrawable(context))
-//                    .error(R.drawable.ic_broken_image)
-//                    .into(holder.ivPoster);
-//
-//            holder.cvMovie.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Intent intent = new Intent(context, MovieDetailActivity.class);
-//                    intent.putExtra("imdbId", movieList.get(position).getImdbID());
-//                    context.startActivity(intent);
-//                }
-//            });
-//        }
     }
 
     @Override

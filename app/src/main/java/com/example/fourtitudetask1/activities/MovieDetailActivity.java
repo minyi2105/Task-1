@@ -1,7 +1,6 @@
 package com.example.fourtitudetask1.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Context;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,13 +9,19 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.bumptech.glide.Glide;
 import com.example.fourtitudetask1.R;
+import com.example.fourtitudetask1.task3.di.InitApplication;
+import com.example.fourtitudetask1.task3.di.component.DaggerActivityComponent;
+import com.example.fourtitudetask1.task3.di.module.MvpModule;
 import com.example.fourtitudetask1.task3.model.MovieApiResponse;
 import com.example.fourtitudetask1.task3.mvp.movie_detail.MovieDetailsContract;
-import com.example.fourtitudetask1.task3.mvp.movie_detail.MovieDetailsPresenter;
 import com.example.fourtitudetask1.util.ValidateUtil;
 import com.google.android.material.snackbar.Snackbar;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -76,7 +81,11 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
 
     private String imdbId;
 
-    private MovieDetailsPresenter movieDetailsPresenter;
+    @Inject
+    MovieDetailsContract.Presenter movieDetailsPresenter;
+
+    @Inject
+    Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,8 +94,11 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
 
         ButterKnife.bind(this);
 
-        //Initializing presenter
-        movieDetailsPresenter = new MovieDetailsPresenter(this);
+        DaggerActivityComponent.builder()
+                .appComponent(InitApplication.get(this).component())
+                .mvpModule(new MvpModule(this))
+                .build()
+                .inject(this);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
