@@ -1,6 +1,7 @@
 package com.example.fourtitudetask1.task3.mvp.movie_list;
 
 import com.example.fourtitudetask1.task3.model.Search;
+import com.example.fourtitudetask1.task3.model.SearchApiResponse;
 
 import java.util.List;
 
@@ -8,7 +9,7 @@ public interface MovieListContract {
     interface Model {
 
         interface OnFinishedListener {
-            void onSuccess(List<Search> movieArrayList);
+            void onSuccess(List<Search> movieArrayList, SearchApiResponse searchApiResponse);
 
             void onFailure(Throwable t);
         }
@@ -33,6 +34,8 @@ public interface MovieListContract {
         void showEmptyView();
 
         void hideEmptyView();
+
+        void setSearchApiResponse(SearchApiResponse searchApiResponse);
 
     }
 

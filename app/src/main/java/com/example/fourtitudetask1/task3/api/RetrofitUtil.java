@@ -18,7 +18,6 @@ public class RetrofitUtil {
             //uncomment it if needed to format dateTime value, and apply ".addConverterFactory(GsonConverterFactory.create(gson))"
 //            Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").create();
 
-            //Not sure how to check the log
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 

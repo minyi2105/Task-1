@@ -10,9 +10,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.fourtitudetask1.R;
+import com.example.fourtitudetask1.adapters.RatingAdapter;
 import com.example.fourtitudetask1.task3.di.InitApplication;
 import com.example.fourtitudetask1.task3.di.component.DaggerActivityComponent;
 import com.example.fourtitudetask1.task3.di.module.MvpModule;
@@ -78,6 +81,8 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     ProgressBar progressBar;
     @BindView(R.id.rl_movieDetails)
     RelativeLayout rlMovieDetails;
+    @BindView(R.id.rv_ratings)
+    RecyclerView rvRatings;
 
     private String imdbId;
 
@@ -160,6 +165,13 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
                     .placeholder(ValidateUtil.getCircularProgressDrawable(MovieDetailActivity.this))
                     .error(R.drawable.ic_broken_image)
                     .into(ivPoster);
+
+            rvRatings.setHasFixedSize(true);
+            rvRatings.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+
+            RatingAdapter ratingAdapter = new RatingAdapter(MovieDetailActivity.this, movieApiResponse.getRatings());
+            rvRatings.setAdapter(ratingAdapter);
+            ratingAdapter.notifyDataSetChanged();
         }
     }
 

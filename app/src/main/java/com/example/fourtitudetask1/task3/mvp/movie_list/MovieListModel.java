@@ -19,13 +19,10 @@ public class MovieListModel implements MovieListContract.Model {
 
     private final String TAG = "MovieListModel";
     private List<Search> movieList;
+    private SearchApiResponse movie;
 
     @Override
     public void getMovieList(OnFinishedListener onFinishedListener, String searchResult, int page) {
-
-        if (page == 1) {
-            movieList = new ArrayList<>();
-        }
 
         OmdbHttpClient apiService =
                 RetrofitUtil.getRetrofitInstance().create(OmdbHttpClient.class);
@@ -41,12 +38,15 @@ public class MovieListModel implements MovieListContract.Model {
 
                     @Override
                     public void onNext(SearchApiResponse searchApiResponse) {
+
                         if (searchApiResponse.getResponse().equals("True")) {
-                            if (page == 1) {
+//                            if (page == 1) {
                                 movieList = new ArrayList<>(searchApiResponse.getSearch());
-                            } else {
-                                movieList.addAll(searchApiResponse.getSearch());
-                            }
+//                            } else {
+//                                movieList.addAll(searchApiResponse.getSearch());
+//                            }
+
+                            movie = searchApiResponse;
                         }
                     }
 
@@ -58,7 +58,7 @@ public class MovieListModel implements MovieListContract.Model {
 
                     @Override
                     public void onComplete() {
-                        onFinishedListener.onSuccess(movieList);
+                        onFinishedListener.onSuccess(movieList, movie);
                     }
                 });
     }

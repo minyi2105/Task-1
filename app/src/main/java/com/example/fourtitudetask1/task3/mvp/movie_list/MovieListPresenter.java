@@ -1,6 +1,7 @@
 package com.example.fourtitudetask1.task3.mvp.movie_list;
 
 import com.example.fourtitudetask1.task3.model.Search;
+import com.example.fourtitudetask1.task3.model.SearchApiResponse;
 
 import java.util.List;
 
@@ -10,7 +11,6 @@ public class MovieListPresenter implements MovieListContract.Presenter, MovieLis
 
     private MovieListContract.View movieListView;
     private MovieListContract.Model movieListModel;
-    private int page = 1;
 
     @Inject
     public MovieListPresenter(MovieListContract.View movieListView) {
@@ -19,13 +19,13 @@ public class MovieListPresenter implements MovieListContract.Presenter, MovieLis
     }
 
     @Override
-    public void onSuccess(List<Search> movieArrayList) {
-
+    public void onSuccess(List<Search> movieArrayList, SearchApiResponse searchApiResponse) {
+        movieListView.setSearchApiResponse(searchApiResponse);
         movieListView.setDataToRecyclerView(movieArrayList);
 
         if (movieListView != null) {
             movieListView.hideProgress();
-            if (!movieArrayList.isEmpty()) {
+            if (movieArrayList != null) {
                 movieListView.hideEmptyView();
             } else {
                 movieListView.showEmptyView();
@@ -61,7 +61,6 @@ public class MovieListPresenter implements MovieListContract.Presenter, MovieLis
             if (movieListView.getSearchInput().isEmpty()) {
 //                movieListView.showInputError();
             } else {
-                this.page = 1;
                 movieListView.showProgress();
                 movieListModel.getMovieList(this, movieListView.getSearchInput(), 1);
 //                movieListView.showUserSavedMessage();
@@ -73,8 +72,7 @@ public class MovieListPresenter implements MovieListContract.Presenter, MovieLis
     public void loadMoreMovieList(int page) {
         if (movieListView != null) {
             movieListView.showProgress();
-            movieListModel.getMovieList(this, movieListView.getSearchInput(), page);
-            this.page = page;
         }
+        movieListModel.getMovieList(this, movieListView.getSearchInput(), page);
     }
 }

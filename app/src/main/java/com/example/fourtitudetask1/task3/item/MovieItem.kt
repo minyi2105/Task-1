@@ -16,7 +16,7 @@ class MovieItem(private val context: Context, val movie: Search) : BindableItem<
     }
 
     override fun bind(viewBinding: ItemMovieBinding, position: Int) {
-        viewBinding.tvTitle.text = "${movie.title} $position"
+        viewBinding.tvTitle.text = movie.title
         viewBinding.tvYear.text = movie.year
         viewBinding.tvImdbID.text = movie.imdbID
         viewBinding.tvType.text = movie.type
@@ -27,12 +27,5 @@ class MovieItem(private val context: Context, val movie: Search) : BindableItem<
                 .placeholder(ValidateUtil.getCircularProgressDrawable(context))
                 .error(R.drawable.ic_broken_image)
                 .into(viewBinding.ivPoster)
-
-        /*viewBinding.cvMovie.setOnClickListener {
-            val intent = Intent(context, MovieDetailActivity::class.java)
-            intent.putExtra("imdbId", movie.imdbID)
-            context.startActivity(intent)
-        }*/
     }
-
 }
