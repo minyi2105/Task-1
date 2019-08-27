@@ -174,6 +174,8 @@ public class MovieMainActivity extends AppCompatActivity implements MovieListCon
 
     @Override
     public void setDataToRecyclerView(List<Search> movieArrayList) {
+        movieItems = new ArrayList<>();
+
         if (movieArrayList != null) {
 
             for (Search eachMovie : movieArrayList) {
@@ -196,10 +198,8 @@ public class MovieMainActivity extends AppCompatActivity implements MovieListCon
         switch (view.getId()) {
             case R.id.btn_search:
                 //reset the Groupie else items will be appended each time new search is made
-                listSection.removeAll(movieItems);
-                movieItems = new ArrayList<>();
+                listSection.clear();
                 movieItems.clear();
-                listSection.addAll(movieItems);
                 listSection.notifyChanged();
 
                 movieListPresenter.searchButtonClicked();
