@@ -108,10 +108,6 @@ public class MovieMainActivity extends AppCompatActivity implements MovieListCon
                 Intent intent = new Intent(MovieMainActivity.this, MovieDetailActivity.class);
                 intent.putExtra("imdbId", ((MovieItem) item).getMovie().getImdbID());
                 MovieMainActivity.this.startActivity(intent);
-
-//                Bundle imdbIdBundle = new Bundle();
-//                imdbIdBundle.putString("imdbId", ((MovieItem) item).getMovie().getImdbID());
-//                Navigation.findNavController(view).navigate(R.id.movieDetailActivity, imdbIdBundle);
             }
         });
     }
