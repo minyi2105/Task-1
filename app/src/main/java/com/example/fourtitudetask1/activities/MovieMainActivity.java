@@ -78,11 +78,6 @@ public class MovieMainActivity extends AppCompatActivity implements MovieListCon
     @Inject
     Context mContext;
 
-    public static void start(Context context) {
-        Intent starter = new Intent(context, MovieMainActivity.class);
-        context.startActivity(starter);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,6 +108,10 @@ public class MovieMainActivity extends AppCompatActivity implements MovieListCon
                 Intent intent = new Intent(MovieMainActivity.this, MovieDetailActivity.class);
                 intent.putExtra("imdbId", ((MovieItem) item).getMovie().getImdbID());
                 MovieMainActivity.this.startActivity(intent);
+
+//                Bundle imdbIdBundle = new Bundle();
+//                imdbIdBundle.putString("imdbId", ((MovieItem) item).getMovie().getImdbID());
+//                Navigation.findNavController(view).navigate(R.id.movieDetailActivity, imdbIdBundle);
             }
         });
     }
@@ -175,8 +174,6 @@ public class MovieMainActivity extends AppCompatActivity implements MovieListCon
 
     @Override
     public void setDataToRecyclerView(List<Search> movieArrayList) {
-        movieItems = new ArrayList<>();
-
         if (movieArrayList != null) {
 
             for (Search eachMovie : movieArrayList) {
@@ -201,6 +198,7 @@ public class MovieMainActivity extends AppCompatActivity implements MovieListCon
                 //reset the Groupie else items will be appended each time new search is made
                 listSection.removeAll(movieItems);
                 movieItems = new ArrayList<>();
+                movieItems.clear();
                 listSection.addAll(movieItems);
                 listSection.notifyChanged();
 

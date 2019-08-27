@@ -5,6 +5,7 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_movie"
+        android:name="android.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"

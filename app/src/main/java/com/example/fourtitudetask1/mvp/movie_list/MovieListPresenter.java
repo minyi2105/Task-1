@@ -63,7 +63,6 @@ public class MovieListPresenter implements MovieListContract.Presenter, MovieLis
             } else {
                 movieListView.showProgress();
                 movieListModel.getMovieList(this, movieListView.getSearchInput(), 1);
-//                movieListView.showUserSavedMessage();
             }
         }
     }
