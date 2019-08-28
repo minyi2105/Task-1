@@ -88,6 +88,7 @@ public class MovieMainActivity extends AppCompatActivity implements MovieListCon
         btnSearch.setOnClickListener(this);
 
         rvMovie.setLayoutManager(mLayoutManager);
+
         DaggerActivityComponent.builder()
                 .appComponent(InitApplication.get(this).component())
                 .mvpModule(new MvpModule(this))
