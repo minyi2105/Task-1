@@ -1,4 +1,4 @@
-package com.example.fourtitudetask1.adapters;
+package com.example.fourtitudetask1.adapter;
 
 import android.content.Context;
 import android.content.Intent;

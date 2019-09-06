@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/triviaMainFragment">
+
+    <fragment
+        android:id="@+id/triviaMainFragment"
+        android:name="com.example.fourtitudetask1.ui.main.TriviaMainFragment"
+        android:label="fragment_trivia_main"
+        tools:layout="@layout/fragment_trivia_main" >
+        <action
+            android:id="@+id/action_triviaMainFragment_to_questionFragment"
+            app:destination="@id/questionFragment" />
+        <action
+            android:id="@+id/action_triviaMainFragment_to_questionCountFragment"
+            app:destination="@id/questionCountFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/questionFragment"
+        android:name="com.example.fourtitudetask1.ui.question.QuestionFragment"
+        android:label="fragment_question"
+        tools:layout="@layout/fragment_question" >
+        <argument
+            android:name="category"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <argument
+            android:name="difficulty"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="type"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_questionFragment_self"
+            app:destination="@id/questionFragment"
+            app:popUpTo="@+id/navigation_graph"
+            app:popUpToInclusive="true"/>
+    </fragment>
+    <fragment
+        android:id="@+id/questionCountFragment"
+        android:name="com.example.fourtitudetask1.ui.questionCount.QuestionCountFragment"
+        android:label="fragment_question_count"
+        tools:layout="@layout/fragment_question_count" />
+</navigation>

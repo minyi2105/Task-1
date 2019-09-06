@@ -6,9 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fourtitudetask1.R
-import com.example.fourtitudetask1.adapters.DummyAdapter
+import com.example.fourtitudetask1.adapter.DummyAdapter
 import com.example.fourtitudetask1.model.Dummy
-import kotlinx.android.synthetic.main.activity_dummy_main.*
 
 
 class DummyMainActivity : AppCompatActivity(), View.OnClickListener {

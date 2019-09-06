@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.fourtitudetask1.R;
-import com.example.fourtitudetask1.adapters.RatingAdapter;
+import com.example.fourtitudetask1.adapter.RatingAdapter;
 import com.example.fourtitudetask1.di.InitApplication;
 import com.example.fourtitudetask1.di.component.DaggerActivityComponent;
 import com.example.fourtitudetask1.di.module.MvpModule;

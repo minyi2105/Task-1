@@ -18,4 +18,21 @@
     <string name="description_is_required">Description is required</string>
     <string name="image_url_is_required">Image Url is required.</string>
     <string name="error_occurred">An error has occurred, please try again later.</string>
+
+    //Open Trivia Main Activity
+    <string-array name="trivia_difficulty">
+        <item>Default</item>
+        <item>Easy</item>
+        <item>Medium</item>
+        <item>Hard</item>
+    </string-array>
+
+    <string-array name="trivia_type">
+        <item>Default</item>
+        <item>Multiple</item>
+        <item>Boolean</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

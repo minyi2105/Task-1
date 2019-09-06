@@ -1,7 +1,7 @@
 package com.example.fourtitudetask1.api;
 
-import com.example.fourtitudetask1.model.SearchApiResponse;
 import com.example.fourtitudetask1.model.MovieApiResponse;
+import com.example.fourtitudetask1.model.SearchApiResponse;
 
 import io.reactivex.Observable;
 import retrofit2.Call;
