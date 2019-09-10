@@ -60,6 +60,9 @@ class QuestionFragmentPresenter {
     fun loadQuestion(token: String, category: Int?, difficulty: String?, type: String?) {
         view.showProgress()
 
+        difficulty?.toLowerCase()
+        type?.toLowerCase()
+
         disposable = client.getQuestionResponseBody(token, 1, category, difficulty, type)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

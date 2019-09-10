@@ -6,8 +6,14 @@ import com.example.fourtitudetask1.lib.data.remote.service.OpenTriviaApiService
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
 class TriviaMainFragmentPresenter {
+
+    @Inject
+    fun TriviaMainFragmentPresenter() {
+
+    }
 
     private lateinit var view: TriviaMainFragmentMvpView
 
@@ -32,7 +38,7 @@ class TriviaMainFragmentPresenter {
                             Log.v("CATEGORIES", "" + result)
                             view.hideProgress()
 
-                            val finalCategoryList:MutableList<TriviaCategory> = mutableListOf()
+                            val finalCategoryList: MutableList<TriviaCategory> = mutableListOf()
                             finalCategoryList.add(TriviaCategory(99, "Default"))
                             finalCategoryList.addAll(result.triviaCategoriesList)
 

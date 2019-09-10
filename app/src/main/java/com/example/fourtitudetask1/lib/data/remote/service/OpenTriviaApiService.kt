@@ -1,7 +1,7 @@
 package com.example.fourtitudetask1.lib.data.remote.service
 
 import com.example.fourtitudetask1.lib.data.model.json.response.Category
-import com.example.fourtitudetask1.lib.data.model.json.response.QuestionCategory
+import com.example.fourtitudetask1.lib.data.model.json.response.QuestionCount
 import com.example.fourtitudetask1.lib.data.model.json.response.QuestionResponse
 import com.example.fourtitudetask1.lib.data.model.json.response.SessionToken
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -21,7 +21,7 @@ interface OpenTriviaApiService {
     fun getSessionTokenResponseBody(@Query("command") command: String): Observable<SessionToken>
 
     @GET("api_count.php")
-    fun getQuestionCountByIdResponseBody(@Query("category") category: String): Observable<QuestionCategory>
+    fun getQuestionCountByIdResponseBody(@Query("category") category: Int): Observable<QuestionCount>
 
     @GET("api.php")
     fun getQuestionResponseBody(@Query("token") token: String,

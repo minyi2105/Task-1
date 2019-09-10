@@ -1,6 +1,6 @@
-package com.example.fourtitudetask1
+package com.example.fourtitudetask1.util
 
-class Static {
+class StaticUtil {
     companion object {
         var sessionToken: String? = null
     }

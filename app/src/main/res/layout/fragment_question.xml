@@ -49,19 +49,23 @@
                 android:paddingRight="8dp"
                 android:paddingBottom="3dp"
                 android:textColor="@color/colorBlack"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_question_title"
                 app:layout_constraintLeft_toRightOf="@+id/tv_question_title"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tv_question_title"
-                tools:text="Hard" />
+                tools:text="Hard"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/tv_question"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
+                android:visibility="invisible"
                 app:layout_constraintTop_toBottomOf="@id/tv_difficulty"
-                tools:text="Which Elite Four member from the first generation of Pokemon became the champion in the next generation?" />
+                tools:text="Which Elite Four member from the first generation of Pokemon became the champion in the next generation?"
+                tools:visibility="visible" />
 
             <ProgressBar
                 android:id="@+id/progress_bar"
@@ -79,15 +83,17 @@
         android:layout_width="0dp"
         android:layout_height="100dp"
         android:layout_margin="15dp"
+        android:visibility="invisible"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/cv_option_2"
-        app:layout_constraintTop_toBottomOf="@+id/cv_question">
+        app:layout_constraintTop_toBottomOf="@+id/cv_question"
+        tools:visibility="visible">
 
         <TextView
             android:id="@+id/tv_option_1"
             android:layout_width="wrap_content"
-            android:layout_height="42dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="15dp"
             android:gravity="center"
@@ -100,10 +106,12 @@
         android:layout_width="0dp"
         android:layout_height="100dp"
         android:layout_margin="15dp"
+        android:visibility="invisible"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintLeft_toRightOf="@id/cv_option_1"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cv_question">
+        app:layout_constraintTop_toBottomOf="@+id/cv_question"
+        tools:visibility="visible">
 
         <TextView
             android:id="@+id/tv_option_2"
@@ -121,10 +129,12 @@
         android:layout_width="0dp"
         android:layout_height="100dp"
         android:layout_margin="15dp"
+        android:visibility="invisible"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/cv_option_4"
-        app:layout_constraintTop_toBottomOf="@+id/cv_option_1">
+        app:layout_constraintTop_toBottomOf="@+id/cv_option_1"
+        tools:visibility="visible">
 
         <TextView
             android:id="@+id/tv_option_3"
@@ -142,10 +152,12 @@
         android:layout_width="0dp"
         android:layout_height="100dp"
         android:layout_margin="15dp"
+        android:visibility="invisible"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintLeft_toRightOf="@id/cv_option_3"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cv_option_2">
+        app:layout_constraintTop_toBottomOf="@+id/cv_option_2"
+        tools:visibility="visible">
 
         <TextView
             android:id="@+id/tv_option_4"
@@ -158,7 +170,6 @@
             tools:text="Lorelei" />
     </androidx.cardview.widget.CardView>
 
-
     <Button
         android:id="@+id/btn_roll_another"
         android:layout_width="match_parent"
@@ -167,6 +178,4 @@
         android:text="Roll Another"
         android:textColor="@color/colorWhite"
         app:layout_constraintBottom_toBottomOf="parent" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

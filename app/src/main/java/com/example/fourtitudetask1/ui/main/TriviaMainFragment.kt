@@ -11,20 +11,27 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.example.fourtitudetask1.R
 import com.example.fourtitudetask1.adapter.CategorySpinnerAdapter
+import com.example.fourtitudetask1.di.InitApplication
+import com.example.fourtitudetask1.di.component.DaggerActivityComponent
+import com.example.fourtitudetask1.di.module.MvpModule
 import com.example.fourtitudetask1.lib.data.model.json.response.TriviaCategory
 import kotlinx.android.synthetic.main.fragment_trivia_main.*
+import javax.inject.Inject
 
 class TriviaMainFragment : Fragment(), TriviaMainFragmentMvpView, View.OnClickListener {
 
-    //    private lateinit var viewOfLayout: View
     private lateinit var category: TriviaCategory
+
+    @Inject
+    lateinit var presenter: TriviaMainFragmentPresenter
+
+//    var presenter: TriviaMainFragmentPresenter = TriviaMainFragmentPresenter()
 
     override fun onClick(p0: View?) {
         when (p0) {
             btn_next -> {
                 val bundles = Bundle()
 
-//                val category = spn_category.selectedItem.toString()
                 val difficulty = spn_difficulty.selectedItem.toString()
                 val type = spn_type.selectedItem.toString()
 
@@ -36,8 +43,6 @@ class TriviaMainFragment : Fragment(), TriviaMainFragmentMvpView, View.OnClickLi
             }
         }
     }
-
-    var presenter: TriviaMainFragmentPresenter = TriviaMainFragmentPresenter()
 
     override fun setCategorySpinner(categoryList: List<TriviaCategory>?) {
         var categorySpinnerAdapter = CategorySpinnerAdapter(context!!,
@@ -51,8 +56,6 @@ class TriviaMainFragment : Fragment(), TriviaMainFragmentMvpView, View.OnClickLi
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 val triviaCategory: TriviaCategory = categorySpinnerAdapter.getItem(p2)!!
                 category = triviaCategory
-//                val myToast = Toast.makeText(activity, triviaCategory?.id.toString() + triviaCategory?.name, Toast.LENGTH_SHORT)
-//                myToast.show()
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -78,8 +81,6 @@ class TriviaMainFragment : Fragment(), TriviaMainFragmentMvpView, View.OnClickLi
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-//        viewOfLayout = inflater.inflate(R.layout.fragment_trivia_main, container, false)
-//        return viewOfLayout
 
         return inflater.inflate(R.layout.fragment_trivia_main, container, false)
     }
@@ -98,9 +99,6 @@ class TriviaMainFragment : Fragment(), TriviaMainFragmentMvpView, View.OnClickLi
 
         btn_view_question_count.setOnClickListener(Navigation
                 .createNavigateOnClickListener(R.id.action_triviaMainFragment_to_questionCountFragment))
-
-//        btn_next.setOnClickListener(Navigation
-//                .createNavigateOnClickListener(R.id.action_triviaMainFragment_to_questionFragment))
     }
 
     override fun onPause() {
