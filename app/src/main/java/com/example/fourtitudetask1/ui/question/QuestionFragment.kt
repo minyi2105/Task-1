@@ -90,7 +90,6 @@ class QuestionFragment : Fragment(), QuestionFragmentMvpView, View.OnClickListen
     }
 
     override fun setSessionToken(token: String) {
-//        this.token = token
         StaticUtil.sessionToken = token
         presenter.loadQuestion(token, category, difficulty, type)
     }

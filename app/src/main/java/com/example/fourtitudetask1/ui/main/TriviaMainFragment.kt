@@ -11,21 +11,17 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.example.fourtitudetask1.R
 import com.example.fourtitudetask1.adapter.CategorySpinnerAdapter
-import com.example.fourtitudetask1.di.InitApplication
-import com.example.fourtitudetask1.di.component.DaggerActivityComponent
-import com.example.fourtitudetask1.di.module.MvpModule
 import com.example.fourtitudetask1.lib.data.model.json.response.TriviaCategory
 import kotlinx.android.synthetic.main.fragment_trivia_main.*
-import javax.inject.Inject
 
 class TriviaMainFragment : Fragment(), TriviaMainFragmentMvpView, View.OnClickListener {
 
     private lateinit var category: TriviaCategory
 
-    @Inject
-    lateinit var presenter: TriviaMainFragmentPresenter
+//    @Inject
+//    lateinit var presenter: TriviaMainFragmentPresenter
 
-//    var presenter: TriviaMainFragmentPresenter = TriviaMainFragmentPresenter()
+    var presenter: TriviaMainFragmentPresenter = TriviaMainFragmentPresenter()
 
     override fun onClick(p0: View?) {
         when (p0) {

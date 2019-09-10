@@ -50,14 +50,4 @@ public class MvpModule {
     public MovieDetailsContract.Presenter provideMovieDetailsPresenter(MovieDetailsContract.View view) {
         return new MovieDetailsPresenter(view);
     }
-
-    @Provides
-    public TriviaMainFragmentPresenter provideTriviaMainFragmentPresenter() {
-        return new TriviaMainFragmentPresenter();
-    }
-
-    @Provides
-    public QuestionCountFragmentPresenter provideQuestionCountFragmentPresenter() {
-        return new QuestionCountFragmentPresenter();
-    }
 }
