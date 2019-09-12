@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".di.InitApplication"
+        android:name=".AppApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -19,10 +19,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.DummyMainActivity" />
-        <activity android:name=".activities.MovieDetailActivity" />
-        <activity android:name=".activities.MovieMainActivity" />
-        <activity android:name=".activities.DummyDetailActivity" />
     </application>
 
 </manifest>

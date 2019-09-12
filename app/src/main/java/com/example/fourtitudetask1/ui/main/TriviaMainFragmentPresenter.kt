@@ -8,12 +8,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class TriviaMainFragmentPresenter {
-
-    @Inject
-    fun TriviaMainFragmentPresenter() {
-
-    }
+class TriviaMainFragmentPresenter @Inject constructor() {
 
     private lateinit var view: TriviaMainFragmentMvpView
 

@@ -8,16 +8,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fourtitudetask1.R
 import com.example.fourtitudetask1.adapter.QuestionCountAdapter
+import com.example.fourtitudetask1.base.fragment.BaseMvpFragment
+import com.example.fourtitudetask1.lib.data.model.json.response.CategoryQuestionCount
 import com.example.fourtitudetask1.lib.data.model.json.response.QuestionCount
 import kotlinx.android.synthetic.main.fragment_question_count.*
 
-class QuestionCountFragment : Fragment(), QuestionCountFragmentMvpView {
+class QuestionCountFragment : BaseMvpFragment(), QuestionCountFragmentMvpView {
 
-    override fun setQuestionCategoryCount(questionCountList: List<QuestionCount>) {
+    override fun injectAppComponent() {
+        appComponent.inject(this)
+    }
+
+    override fun setQuestionCategoryCount(questionCountList: List<CategoryQuestionCount>) {
         rv_category_count.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         rv_category_count.adapter = QuestionCountAdapter(activity!!, questionCountList)
     }
@@ -45,7 +52,6 @@ class QuestionCountFragment : Fragment(), QuestionCountFragmentMvpView {
 
         (activity as AppCompatActivity).supportActionBar!!.title = "Question Category"
         (activity as AppCompatActivity).supportActionBar!!.elevation = 0f
-        (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         presenter.getQuestionCount()
     }
@@ -53,16 +59,5 @@ class QuestionCountFragment : Fragment(), QuestionCountFragmentMvpView {
     override fun onPause() {
         super.onPause()
         presenter.onPause()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                activity!!.onBackPressed()
-                return true
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
     }
 }

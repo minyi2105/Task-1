@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
@@ -13,13 +14,16 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.example.fourtitudetask1.R
+import com.example.fourtitudetask1.base.fragment.BaseMvpFragment
 import com.example.fourtitudetask1.util.StaticUtil
 import com.example.fourtitudetask1.lib.data.model.json.response.Question
 import kotlinx.android.synthetic.main.fragment_question.*
+import javax.inject.Inject
 
-class QuestionFragment : Fragment(), QuestionFragmentMvpView, View.OnClickListener {
+class QuestionFragment : BaseMvpFragment(), QuestionFragmentMvpView, View.OnClickListener {
 
-    private var presenter: QuestionFragmentPresenter = QuestionFragmentPresenter()
+    @Inject
+    lateinit var presenter: QuestionFragmentPresenter
 
     private var category: Int? = null
     private var difficulty: String? = null
@@ -27,17 +31,55 @@ class QuestionFragment : Fragment(), QuestionFragmentMvpView, View.OnClickListen
 
     private var correctAnswer: String? = null
 
+    override fun injectAppComponent() {
+        appComponent.inject(this)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_question, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        presenter.attach(this)
+
+        (activity as AppCompatActivity).supportActionBar!!.title = "Question"
+        (activity as AppCompatActivity).supportActionBar!!.elevation = 0f
+
+        btn_roll_another.setOnClickListener(this)
+        cv_option_1.setOnClickListener(this)
+        cv_option_2.setOnClickListener(this)
+        cv_option_3.setOnClickListener(this)
+        cv_option_4.setOnClickListener(this)
+
+        category = arguments?.getInt("category")
+        difficulty = arguments?.getString("difficulty")
+        type = arguments?.getString("type")
+
+        if (StaticUtil.sessionToken == null) {
+            presenter.getSessionToken()
+        } else {
+            presenter.loadQuestion(StaticUtil.sessionToken!!, category, difficulty, type)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        presenter.onPause()
+    }
+
     override fun onClick(p0: View?) {
         when (p0) {
             btn_roll_another -> {
-                val bundles = Bundle()
-
-                bundles.putInt("category", category!!)
-                bundles.putString("difficulty", difficulty)
-                bundles.putString("type", type)
-
-//                view?.let { Navigation.findNavController(it).popBackStack(R.id.questionFragment, true) }
-                view?.let { Navigation.findNavController(it).navigate(R.id.action_questionFragment_self, bundles) }
+                if (StaticUtil.sessionToken == null) {
+                    presenter.getSessionToken()
+                } else {
+                    presenter.loadQuestion(StaticUtil.sessionToken!!, category, difficulty, type)
+                }
             }
 
             cv_option_1 -> animateAnswer(tv_option_1, cv_option_1)
@@ -83,10 +125,22 @@ class QuestionFragment : Fragment(), QuestionFragmentMvpView, View.OnClickListen
 
     override fun showProgress() {
         progress_bar.visibility = View.VISIBLE
+        disableButton(btn_roll_another, true)
     }
 
     override fun hideProgress() {
         progress_bar.visibility = View.GONE
+        disableButton(btn_roll_another, false)
+    }
+
+    private fun disableButton(button: Button, isDisable: Boolean) {
+        if (isDisable) {
+            button.isEnabled = false
+            button.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorGray))
+        } else {
+            button.isEnabled = true
+            button.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorAccent))
+        }
     }
 
     override fun setSessionToken(token: String) {
@@ -148,39 +202,5 @@ class QuestionFragment : Fragment(), QuestionFragmentMvpView, View.OnClickListen
                 tv_difficulty.setBackgroundResource(R.drawable.hard_rounded_corner)
             }
         }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_question, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        presenter.attach(this)
-
-        (activity as AppCompatActivity).supportActionBar!!.title = "Question"
-        (activity as AppCompatActivity).supportActionBar!!.elevation = 0f
-        (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-
-        btn_roll_another.setOnClickListener(this)
-        cv_option_1.setOnClickListener(this)
-        cv_option_2.setOnClickListener(this)
-        cv_option_3.setOnClickListener(this)
-        cv_option_4.setOnClickListener(this)
-
-        category = arguments?.getInt("category")
-        difficulty = arguments?.getString("difficulty")
-        type = arguments?.getString("type")
-
-        if (StaticUtil.sessionToken == null) presenter.getSessionToken() else presenter.loadQuestion(StaticUtil.sessionToken!!, category, difficulty, type)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        presenter.onPause()
     }
 }

@@ -6,11 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fourtitudetask1.R
+import com.example.fourtitudetask1.lib.data.model.json.response.CategoryQuestionCount
 import com.example.fourtitudetask1.lib.data.model.json.response.QuestionCount
 import kotlinx.android.synthetic.main.question_count_item.view.*
 
 class QuestionCountAdapter(context: Context,
-                           val categoryCountList: List<QuestionCount>) : RecyclerView.Adapter<QuestionCountAdapter.QuestionCountViewHolder>() {
+                           val categoryCountList: List<CategoryQuestionCount>) : RecyclerView.Adapter<QuestionCountAdapter.QuestionCountViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuestionCountViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -19,13 +20,13 @@ class QuestionCountAdapter(context: Context,
     }
 
     override fun onBindViewHolder(holder: QuestionCountViewHolder, position: Int) {
-        val questionCount: QuestionCount = categoryCountList[position]
+        val categoryQuestionCount: CategoryQuestionCount = categoryCountList[position]
 
-        holder.tvCategoryTitle.text = questionCount.categoryId.toString()
-        holder.tvEasy.text = "Easy: " + questionCount.categoryQuestionCount.totalEasyQuestionCount.toString()
-        holder.tvMedium.text = "Medium: " + questionCount.categoryQuestionCount.totalMediumQuestionCount.toString()
-        holder.tvHard.text = "Hard: " + questionCount.categoryQuestionCount.totalHardQuestionCount.toString()
-        holder.tvTotal.text = questionCount.categoryQuestionCount.totalQuestionCount.toString()
+        holder.tvCategoryTitle.text = categoryQuestionCount.categoryName.toString()
+        holder.tvEasy.text = "Easy: " + categoryQuestionCount.totalEasyQuestionCount.toString()
+        holder.tvMedium.text = "Medium: " + categoryQuestionCount.totalMediumQuestionCount.toString()
+        holder.tvHard.text = "Hard: " + categoryQuestionCount.totalHardQuestionCount.toString()
+        holder.tvTotal.text = categoryQuestionCount.totalQuestionCount.toString()
     }
 
     override fun getItemCount(): Int {
